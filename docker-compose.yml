@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:12.2
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: scmd
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    command: ["postgres", "-c", "log_statement=all"]
+    networks:
+      - scmda_inbound
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.2.2
+    hostname: zookeeper
+    container_name: enterprise_zookeeper
+    ports:
+      - "3181:3181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 3181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - scmda_inbound
+
+  broker:
+    image: confluentinc/cp-enterprise-kafka:5.2.2
+    hostname: broker
+    container_name: enterprise-pathfinder
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:3181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:39092,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:39092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+    networks:
+      - scmda_inbound
+networks:
+  scmda_inbound:
