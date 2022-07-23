@@ -1,18 +1,6 @@
 version: '3'
 
 services:
-  postgres:
-    image: postgres:12.2
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: scmd
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    command: ["postgres", "-c", "log_statement=all"]
-    networks:
-      - scmda_inbound
-
   zookeeper:
     image: confluentinc/cp-zookeeper:5.2.2
     hostname: zookeeper
@@ -23,7 +11,26 @@ services:
       ZOOKEEPER_CLIENT_PORT: 3181
       ZOOKEEPER_TICK_TIME: 2000
     networks:
-      - scmda_inbound
+      - retail_inbound
+
+  mongo:
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:password@mongo:27017/
 
   broker:
     image: confluentinc/cp-enterprise-kafka:5.2.2
@@ -42,6 +49,6 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
     networks:
-      - scmda_inbound
+      - retail_inbound
 networks:
-  scmda_inbound:
+  retail_inbound:
