@@ -25,7 +25,7 @@ public class PriceController {
     private final IPriceService priceService;
 
     @Autowired
-    public PriceController(IPriceService priceService) {
+    public PriceController(PriceService priceService) {
         this.priceService = priceService;
     }
 
@@ -52,5 +52,6 @@ public class PriceController {
     public ResponseEntity<Void> createPrice(@PathVariable Integer tcin) {
         priceService.deletePrice(tcin);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
     }
 }

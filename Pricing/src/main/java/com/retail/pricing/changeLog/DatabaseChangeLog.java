@@ -1,13 +1,10 @@
 package com.retail.pricing.changeLog;
 
-import com.retail.pricing.dao.PriceRepository;
 import com.retail.pricing.model.Detail;
 import com.retail.pricing.model.Price;
-import com.retail.pricing.service.KafkaProducerService;
 import io.mongock.api.annotations.ChangeUnit;
 import io.mongock.api.annotations.Execution;
 import io.mongock.api.annotations.RollbackExecution;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.ArrayList;
@@ -21,8 +18,10 @@ public class DatabaseChangeLog {
 
         @Execution
         public void execution(MongoTemplate mongoTemplate) {
+
             List<Price> inserteRecords = generateRandomData();
             mongoTemplate.insertAll(inserteRecords);
+            mongoTemplate.insertAll(generateRandomData());
         }
 
         public List<Price> generateRandomData() {
@@ -46,6 +45,21 @@ public class DatabaseChangeLog {
             categoryWithDetails.put("Electronics", new Detail(800 + (3000 - 800) * new Random().nextDouble(), "USD", "Speakers"));
             categoryWithDetails.put("Electronics", new Detail(100 + (500 - 100) * new Random().nextDouble(), "USD", "Printer"));
             categoryWithDetails.put("Electronics", new Detail(700 + (2000 - 700) * new Random().nextDouble(), "USD", "LG HD Monitor"));
+            categoryWithDetails.put("Furniture", new Detail(new Random().nextDouble(), "USD", "couch"));
+            categoryWithDetails.put("Furniture", new Detail(new Random().nextDouble(), "USD", "Table"));
+            categoryWithDetails.put("Furniture", new Detail(new Random().nextDouble(), "USD", "Mattress"));
+            categoryWithDetails.put("Furniture", new Detail(new Random().nextDouble(), "USD", "Chairs"));
+
+            // Produce
+            categoryWithDetails.put("Produce", new Detail(new Random().nextDouble(), "USD", "Eggs"));
+            categoryWithDetails.put("Produce", new Detail(new Random().nextDouble(), "USD", "Milk"));
+            categoryWithDetails.put("Produce", new Detail(new Random().nextDouble(), "USD", "Yogurt"));
+            categoryWithDetails.put("Produce", new Detail(new Random().nextDouble(), "USD", "Apple"));
+
+            // Electronics
+            categoryWithDetails.put("Electronics", new Detail(new Random().nextDouble(), "USD", "Speakers"));
+            categoryWithDetails.put("Electronics", new Detail(new Random().nextDouble(), "USD", "Printer"));
+            categoryWithDetails.put("Electronics", new Detail(new Random().nextDouble(), "USD", "LG HD Monitor"));
 
             for (int i = 0; i < 100; i++) {
 
