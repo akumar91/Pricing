@@ -12,6 +12,7 @@ to give the final output of retail price of the product.
     * Kafka
     * MongoDB
     * Mongo Express (To access mongoDB, go to url: http://localhost:8081/)
+3. docker exec -it enterprise-pathfinder /bin/bash (get inside kafka container)
 
 
 # Pricing Database
