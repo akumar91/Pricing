@@ -61,15 +61,13 @@ public class DatabaseChangeLog {
             categoryWithDetails.put("Electronics", new Detail(new Random().nextDouble(), "USD", "Printer"));
             categoryWithDetails.put("Electronics", new Detail(new Random().nextDouble(), "USD", "LG HD Monitor"));
 
-            for (int i = 0; i < 100; i++) {
+            for (Map.Entry<String, Detail> categoryWithDetail : categoryWithDetails.entrySet()) {
+                System.out.println("************ Random Value ************ \n" + categoryWithDetail.getKey() + " :: " + categoryWithDetail.getValue());
 
-                Object[] categories = categoryWithDetails.keySet().toArray();
-                Object category = categories[new Random().nextInt(categories.length)];
-                System.out.println("************ Random Value ************ \n" + category + " :: " + categoryWithDetails.get(category));
-
-                Price price = new Price(new Random().nextInt(5000), category.toString(), categoryWithDetails.get(category));
+                Price price = new Price(new Random().nextInt(5000), categoryWithDetail.getKey() , categoryWithDetail.getValue());
 
                 randomPriceData.add(price);
+
             }
 
             return randomPriceData;
