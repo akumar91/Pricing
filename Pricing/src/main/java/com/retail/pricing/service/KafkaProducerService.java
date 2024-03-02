@@ -13,7 +13,7 @@ public class KafkaProducerService {
     @Autowired
     private KafkaTemplate<String, Price> kafkaTemplate;
 
-    String kafkaTopic = "test";
+    String kafkaTopic = "price-topic";
 
     public void send(Price user) {
         LOG.info("Sending User Json Serializer : {}", user);

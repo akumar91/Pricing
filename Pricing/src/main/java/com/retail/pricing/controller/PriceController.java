@@ -2,7 +2,6 @@ package com.retail.pricing.controller;
 
 import com.retail.pricing.model.Price;
 import com.retail.pricing.service.IPriceService;
-import com.retail.pricing.service.PriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,7 @@ public class PriceController {
     private final IPriceService priceService;
 
     @Autowired
-    public PriceController(PriceService priceService) {
+    public PriceController(IPriceService priceService) {
         this.priceService = priceService;
     }
 
